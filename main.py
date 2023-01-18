@@ -24,9 +24,9 @@ def pixelate(input_file_path, pixel_size,file_name):
     
     for item in d:
    
-        if item[0] in list(range(200, 255)) and item[1] in list(range(200, 255)) and item[2] in list(range(200, 255)):
+        if item[0] in list(range(200, 256)) and item[1] in list(range(200, 256)) and item[2] in list(range(200, 256)):
             new_image.append((255, 255, 255))
-        elif item[0] in list(range(0, 200)) and item[1] in list(range(0, 200)) and item[2] in list(range(0, 200)):
+        elif item[0] in list(range(0, 201)) and item[1] in list(range(0, 201)) and item[2] in list(range(0, 201)):
             new_image.append((0, 0, 0))
         else:
             new_image.append(item)
@@ -54,21 +54,30 @@ def pixelImage(input_file_path,pixel_size):
     pixel_values = list(image.getdata())
     
     for x in pixel_values:
-        if (x[0]!= 0 and x[1]!= 0 and x[2]!=0):
-            if(x[0]!= 255 and x[1]!= 255 and x[2]!=255):
+        if (x!= (0,0,0)):
+            if(x!= (255,255,255)):
                 print(x)
                 print("===")
-            
+                
+def processMaze (input_file_path,pixel_size):
+    image = Image.open(input_file_path)
     
-    # if image.mode == "RGB":
-    #     channels = 3
-    # elif image.mode == "L":
-    #     channels = 1
-    # else:
-    #     print("Unknown mode: %s" % image.mode)
-    #     return None
-    # pixel_values = array(pixel_values).reshape((width, height, channels))
-    # return pixel_values
+    image = image.resize(
+        (image.size[0] // pixel_size, image.size[1] // pixel_size),
+        Image.NEAREST
+    )
+    pixel_values = list(image.getdata())
+    maze = []
+    for mazeRow in pixel_values:
+        tempMazeRow = []
+        if mazeRow == (255, 255, 255):
+            tempMazeRow.append('#')
+        elif mazeRow == (0, 0, 0):
+            tempMazeRow.append(" ")
+        maze.append(tempMazeRow)
+    return maze
     
 pixelate("map2.bmp",20,"pixel2.bmp")
 pixelImage("pixel2.bmp",20)
+# maze = processMaze("pixel2.bmp",20)
+# print(maze)
