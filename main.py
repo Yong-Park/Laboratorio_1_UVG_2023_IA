@@ -8,17 +8,12 @@ def pixelate(input_file_path, pixel_size,file_name):
         (image.size[0] // pixel_size, image.size[1] // pixel_size),
         Image.NEAREST
     )
-    d = image.getdata()
-    counter = 0
-    for item in d:
-        print(item)
-        counter +=1
-    print(counter)
-    
-    image = image.resize(
-        (image.size[0] * pixel_size, image.size[1] * pixel_size),
-        Image.NEAREST
-    )
+    # d = image.getdata()
+    # counter = 0
+    # for item in d:
+    #     print(item)
+    #     counter +=1
+    # print(counter)
     
     
     image = image.convert("RGB")
@@ -37,13 +32,25 @@ def pixelate(input_file_path, pixel_size,file_name):
             new_image.append(item)
             
     image.putdata(new_image)
+    
+    image = image.resize(
+        (image.size[0] * pixel_size, image.size[1] * pixel_size),
+        Image.NEAREST
+    )
 
     image.save(file_name)
 
 
-def pixelImage(input_file_path):
+def pixelImage(input_file_path,pixel_size):
     image = Image.open(input_file_path)
     width, height = image.size
+    
+    
+    image = image.resize(
+        (image.size[0] // pixel_size, image.size[1] // pixel_size),
+        Image.NEAREST
+    )
+    
     pixel_values = list(image.getdata())
     
     for x in pixel_values:
@@ -63,5 +70,5 @@ def pixelImage(input_file_path):
     # pixel_values = array(pixel_values).reshape((width, height, channels))
     # return pixel_values
     
-pixelate("map1.bmp",35,"pixel1.bmp")
-# pixelImage("pixel2.bmp")
+pixelate("map2.bmp",20,"pixel2.bmp")
+pixelImage("pixel2.bmp",20)
