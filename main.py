@@ -92,4 +92,7 @@ def bmp_to_array(input_file_path, pixel_size):
 
 
 pixelate("map2.bmp",20,"pixel2.bmp")
-bmp_to_array("pixel2.bmp", 20)
+bmp_array = bmp_to_array("pixel2.bmp", 20)
+
+for row in bmp_array:
+    print(row)
