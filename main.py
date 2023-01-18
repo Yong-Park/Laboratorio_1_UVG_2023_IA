@@ -34,42 +34,6 @@ def pixelate(input_file_path, pixel_size, file_name):
 
     image.save(file_name)
 
-
-def pixelImage(input_file_path,pixel_size):
-    image = Image.open(input_file_path)
-
-    image = image.resize(
-        (image.size[0] // pixel_size, image.size[1] // pixel_size),
-        Image.NEAREST
-    )
-
-    pixel_values = list(image.getdata())
-
-    for x in pixel_values:
-        if (x!= (0,0,0)):
-            if(x!= (255,255,255)):
-                print(x)
-                print("===")
-
-
-def processMaze (input_file_path,pixel_size):
-    image = Image.open(input_file_path)
-
-    image = image.resize(
-        (image.size[0] // pixel_size, image.size[1] // pixel_size),
-        Image.NEAREST
-    )
-    pixel_values = list(image.getdata())
-    maze = []
-    for mazeRow in pixel_values:
-        tempMazeRow = []
-        if mazeRow == (255, 255, 255):
-            tempMazeRow.append('#')
-        elif mazeRow == (0, 0, 0):
-            tempMazeRow.append(" ")
-        maze.append(tempMazeRow)
-    return maze
-
 def bmp_to_array(input_file_path, pixel_size):
     bmp_array = []
     width, height, pixels = bmp.read_bmp(input_file_path)
