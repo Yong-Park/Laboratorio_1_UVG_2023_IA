@@ -8,6 +8,13 @@ def pixelate(input_file_path, pixel_size,file_name):
         (image.size[0] // pixel_size, image.size[1] // pixel_size),
         Image.NEAREST
     )
+    d = image.getdata()
+    counter = 0
+    for item in d:
+        print(item)
+        counter +=1
+    print(counter)
+    
     image = image.resize(
         (image.size[0] * pixel_size, image.size[1] * pixel_size),
         Image.NEAREST
@@ -57,4 +64,4 @@ def pixelImage(input_file_path):
     # return pixel_values
     
 pixelate("map1.bmp",35,"pixel1.bmp")
-pixelImage("pixel2.bmp")
+# pixelImage("pixel2.bmp")
