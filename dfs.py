@@ -2,7 +2,6 @@ class DFS:
     def __init__(self,maze):
         self.maze = maze
         self.moved = []
-        self.searched =[]
         self.visited=[]
         self.goal=[]
         self.start = []
@@ -62,7 +61,6 @@ class DFS:
             if actual_y-1 >= 0:
                 if self.maze[actual_y-1][actual_x] != 0:
                     if([actual_x,actual_y-1]) not in self.visited:
-                        # self.searched.insert(0,[self.moved[len(self.moved)-1][0],self.moved[len(self.moved)-1][1]-1])
                         copy2.append([actual_x,actual_y-1])
                         self.moved.insert(0,copy2)
             
@@ -71,7 +69,6 @@ class DFS:
             if actual_x+1 < self.width:
                 if self.maze[actual_y][actual_x+1] != 0:
                     if([actual_x+1,actual_y]) not in self.visited:
-                        # self.searched.insert(0,[self.moved[len(self.moved)-1][0]+1,self.moved[len(self.moved)-1][1]])
                         copy2.append([actual_x+1,actual_y])
                         self.moved.insert(0,copy2)
 
@@ -80,7 +77,6 @@ class DFS:
             if actual_y+1 < self.height:
                 if self.maze[actual_y+1][actual_x] != 0:
                     if([actual_x,actual_y+1]) not in self.visited:
-                        # self.searched.insert(0,[self.moved[len(self.moved)-1][0],self.moved[len(self.moved)-1][1]+1])
                         copy2.append([actual_x,actual_y+1])
                         self.moved.insert(0,copy2)
     
@@ -89,7 +85,6 @@ class DFS:
             if actual_x-1 >=0:
                 if self.maze[actual_y][actual_x-1] != 0:
                     if([actual_x-1,actual_y]) not in self.visited:
-                        # self.searched.insert(0,[self.moved[len(self.moved)-1][0]-1,self.moved[len(self.moved)-1][1]])
                         copy2.append([actual_x-1,actual_y])
                         self.moved.insert(0,copy2)
             
