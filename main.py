@@ -1,6 +1,7 @@
 from PIL import Image
 from numpy import *
 import bmp
+from dfs import *
 
 def pixelate(input_file_path, pixel_size, file_name):
     image = Image.open(input_file_path)
@@ -54,9 +55,15 @@ def bmp_to_array(input_file_path, pixel_size):
     
     return bmp_array[::-1]
 
+image = "map1.bmp"
+pixel_size = 35
+pixel_image = "pixel1.bmp"
 
-pixelate("map2.bmp",20,"pixel2.bmp")
-bmp_array = bmp_to_array("pixel2.bmp", 20)
+pixelate(image,pixel_size,pixel_image)
+bmp_array = bmp_to_array(pixel_image, pixel_size)
 
-for row in bmp_array:
-    print(row)
+dfs = DFS(bmp_array)
+dfs_laberinto = dfs.Start()
+print("el resultado final es")
+print(dfs_laberinto)
+
