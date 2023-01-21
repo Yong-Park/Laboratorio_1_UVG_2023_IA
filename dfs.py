@@ -14,7 +14,7 @@ class DFS:
     def Start(self):
         self.StartEndPoint()
         # print(self.maze_path)
-        return self.maze_path
+        return self.maze_path,self.visited
         
     #obtener el punto donde comienza y donde termina
     #luego utilizarlos para encontrar el camino
@@ -51,12 +51,13 @@ class DFS:
             self.visited.append([actual_x,actual_y])
             # print("=============")
             
-            #revisar si arriba no es un cuadro negro
+            
             if len(self.moved) == 1:
                 self.move_copy = self.moved.copy()
             else:
                 self.move_copy = self.moved[i].copy()
             self.moved.pop(0)
+            #revisar si arriba no es un cuadro negro
             copy2 = self.move_copy.copy()
             if actual_y-1 >= 0:
                 if self.maze[actual_y-1][actual_x] != 0:

@@ -2,6 +2,7 @@ from PIL import Image
 from numpy import *
 import bmp
 from dfs import *
+from A_fCost import *
 
 def pixelate(input_file_path, pixel_size, file_name):
     image = Image.open(input_file_path)
@@ -62,8 +63,13 @@ pixel_image = "pixel1.bmp"
 pixelate(image,pixel_size,pixel_image)
 bmp_array = bmp_to_array(pixel_image, pixel_size)
 
-dfs = DFS(bmp_array)
-dfs_laberinto = dfs.Start()
-print("el resultado final es")
-print(dfs_laberinto)
+# dfs = DFS(bmp_array)
+# dfs_laberinto,dfs_visited = dfs.Start()
+# print("el resultado final es")
+# print(dfs_laberinto)
+# print("visitados")
+# print(dfs_visited)
+
+afcost = A_FCOST(bmp_array)
+afcost.Start()
 
