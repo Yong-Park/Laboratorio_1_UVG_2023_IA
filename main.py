@@ -1,5 +1,6 @@
 from PIL import Image
 from numpy import *
+import math
 import bmp
 
 def pixelate(input_file_path, pixel_size, file_name):
@@ -55,8 +56,9 @@ def bmp_to_array(input_file_path, pixel_size):
     return bmp_array[::-1]
 
 
-pixelate("map2.bmp",20,"pixel2.bmp")
-bmp_array = bmp_to_array("pixel2.bmp", 20)
+image = "map1.bmp"
+pixelated_image = "pixel1.bmp"
+pixel_size = 20
 
-for row in bmp_array:
-    print(row)
+pixelate(image, pixel_size, pixelated_image)
+bmp_array = bmp_to_array(pixelated_image, pixel_size)
