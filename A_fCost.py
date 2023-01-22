@@ -19,6 +19,8 @@ class A_FCOST:
         self.goalDist=[]
         self.searched=[]
         self.Fmin = 0
+        self.searched_check = []
+        self.Fcost_check = []
        
     def Start(self):
         self.StartEndPoint()
@@ -53,8 +55,8 @@ class A_FCOST:
             if [actual_x,actual_y] not in self.visited:
                 self.visited.append([actual_x,actual_y])
             self.move_copy = self.moved[i].copy()
-            print("visited points: ",self.visited)
-            print("coy of move: ", self.move_copy)
+            # print("visited points: ",self.visited)
+            print("copy of move: ", self.move_copy)
             print("actual position: ",[actual_x,actual_y])
             for endGoal in self.goal:
                 if endGoal in self.moved[i]:
@@ -66,74 +68,102 @@ class A_FCOST:
             #revisar si arriba no es un cuadro negro
             if actual_y-1 >= 0:
                 if self.maze[actual_y-1][actual_x] != 0:
-                    if([actual_x,actual_y-1]) not in self.visited and ([actual_x,actual_y-1]) not in self.searched:
+                    # if([actual_x,actual_y-1]) not in self.visited and ([actual_x,actual_y-1]) not in self.searched:
+                    if [actual_x,actual_y-1] not in self.move_copy:
                         self.surrounding.append([actual_x,actual_y-1])
                         self.searched.append([actual_x,actual_y-1])
                         
             #revisar si arriba derecha no es un cuadro negro
             if actual_y-1 >= 0 and actual_x+1 < self.width:
                 if self.maze[actual_y-1][actual_x+1] != 0:
-                    if([actual_x+1,actual_y-1]) not in self.visited and ([actual_x+1,actual_y-1]) not in self.searched:
+                    # if([actual_x+1,actual_y-1]) not in self.visited and ([actual_x+1,actual_y-1]) not in self.searched:
+                    if [actual_x+1,actual_y-1] not in self.move_copy:
                         self.surrounding.append([actual_x+1,actual_y-1])
                         self.searched.append([actual_x+1,actual_y-1])
             
             #revisar si derecha no es un cuadro negro
             if actual_x+1 < self.width:
                 if self.maze[actual_y][actual_x+1] != 0:
-                    if([actual_x+1,actual_y]) not in self.visited and ([actual_x+1,actual_y]) not in self.searched:
+                    # if([actual_x+1,actual_y]) not in self.visited and ([actual_x+1,actual_y]) not in self.searched:
+                    if [actual_x+1,actual_y] not in self.move_copy:
                         self.surrounding.append([actual_x+1,actual_y])
                         self.searched.append([actual_x+1,actual_y])
                         
             #revisar si derecha inferior no es un cuadro negro
             if actual_x+1 < self.width and actual_y + 1 < self.height:
                 if self.maze[actual_y+1][actual_x+1] != 0:
-                    if([actual_x+1,actual_y+1]) not in self.visited and ([actual_x+1,actual_y+1]) not in self.searched:
+                    # if([actual_x+1,actual_y+1]) not in self.visited and ([actual_x+1,actual_y+1]) not in self.searched:
+                    if [actual_x+1,actual_y+1] not in self.move_copy:
                         self.surrounding.append([actual_x+1,actual_y+1])
                         self.searched.append([actual_x+1,actual_y+1])
                         
             #revisar si abajo no es un cuadro negro
             if actual_y+1 < self.height:
                 if self.maze[actual_y+1][actual_x] != 0:
-                    if([actual_x,actual_y+1]) not in self.visited and ([actual_x,actual_y+1]) not in self.searched:
+                    # if([actual_x,actual_y+1]) not in self.visited and ([actual_x,actual_y+1]) not in self.searched:
+                    if [actual_x,actual_y+1] not in self.move_copy:
                         self.surrounding.append([actual_x,actual_y+1])
                         self.searched.append([actual_x,actual_y+1])
                         
             #revisar si abajo izquierda no es un cuadro negro
             if actual_y+1 < self.height and actual_x-1 >= 0:
                 if self.maze[actual_y+1][actual_x-1] != 0:
-                    if([actual_x-1,actual_y+1]) not in self.visited and ([actual_x-1,actual_y+1]) not in self.searched:
+                    # if([actual_x-1,actual_y+1]) not in self.visited and ([actual_x-1,actual_y+1]) not in self.searched:
+                    if [actual_x-1,actual_y+1] not in self.move_copy:
                         self.surrounding.append([actual_x-1,actual_y+1])
                         self.searched.append([actual_x-1,actual_y+1])
     
             #revisar si izquierda no es un cuadro negro
             if actual_x-1 >=0:
                 if self.maze[actual_y][actual_x-1] != 0:
-                    if([actual_x-1,actual_y]) not in self.visited and ([actual_x-1,actual_y]) not in self.searched:
+                    # if([actual_x-1,actual_y]) not in self.visited and ([actual_x-1,actual_y]) not in self.searched:
+                    if [actual_x-1,actual_y] not in self.move_copy:
                         self.surrounding.append([actual_x-1,actual_y])
                         self.searched.append([actual_x-1,actual_y])
             
             #revisar si izquierda superior no es un cuadro negro
             if actual_x-1 >=0 and actual_y-1>=0:
                 if self.maze[actual_y-1][actual_x-1] != 0:
-                    if([actual_x-1,actual_y-1]) not in self.visited and ([actual_x-1,actual_y-1]) not in self.searched:
+                    # if([actual_x-1,actual_y-1]) not in self.visited and ([actual_x-1,actual_y-1]) not in self.searched:
+                    if [actual_x-1,actual_y-1] not in self.move_copy:
                         self.surrounding.append([actual_x-1,actual_y-1])
                         self.searched.append([actual_x-1,actual_y-1])
                         
             print("alderedores: ", self.surrounding)
-            print("buscados: ", self.searched)
+            # print("buscados: ", self.searched)
             
             self.fCostAnalize()
-            
+            if len(self.searched) != len(self.surrounding):
+                largo_actual = (len(self.searched)-1) - (len(self.surrounding) -1)
+                # print(self.searched)
+                # print(self.surrounding)
+                # print(largo_actual)
+            else:
+                largo_actual = 0
             if type(self.Fcost[0] != list):
+                
                 self.Fmin = min(self.Fcost)
-                        
-                for find in range(len(self.Fcost)):
-                    if self.Fcost[find] == self.Fmin:
-                        if self.searched[find] not in self.visited:
+                # for find_min in 
+                
+                for find in range(len(self.surrounding)):
+                    if self.Fcost[largo_actual+find] == self.Fmin:
+                        if self.searched[largo_actual + find] not in self.move_copy:
+                            print(self.searched[largo_actual + find])
+                        # if self.searched[find] not in self.visited:
                             copy2 = self.move_copy.copy()
-                            copy2.append(self.searched[find])
+                            copy2.append(self.searched[largo_actual + find])
                             self.temporal_moved.insert(0,copy2)
-                            self.visited.append(self.searched[find])
+                            # self.visited.append(self.searched[find])
+                        
+                # for find in range(len(self.Fcost)):
+                #     if self.Fcost[find] == self.Fmin:
+                #         if self.searched[find] not in self.move_copy:
+                #             print(self.searched[find])
+                #         # if self.searched[find] not in self.visited:
+                #             copy2 = self.move_copy.copy()
+                #             copy2.append(self.searched[find])
+                #             self.temporal_moved.insert(0,copy2)
+                #             # self.visited.append(self.searched[find])
 
             else:
                 #esto es solo por el momento
@@ -144,6 +174,7 @@ class A_FCOST:
             #     if self.Fcost[less] == self.Fmin:
             #         if self.searched[less] not in self.visited:
             #             print("los puntos minimos: ",self.searched[less])
+            print("searched: ", self.searched)
             print("Fcost: ", self.Fcost)
             print("temporal array: ", self.temporal_moved)
             input()
