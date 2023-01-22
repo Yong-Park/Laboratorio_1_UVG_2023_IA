@@ -44,9 +44,9 @@ class A_FCOST:
         self.fCostAnalize()
         
     def movement(self):
-        print("========================================================================")
-        for mov in self.moved:
-            print("moved: ", mov)  
+        # print("========================================================================")
+        # for mov in self.moved:
+        #     print("moved: ", mov)  
         for i in range(len(self.moved)):
             
             #actual position
@@ -56,8 +56,8 @@ class A_FCOST:
                 self.visited.append([actual_x,actual_y])
             self.move_copy = self.moved[i].copy()
             # print("visited points: ",self.visited)
-            print("copy of move: ", self.move_copy)
-            print("actual position: ",[actual_x,actual_y])
+            # print("copy of move: ", self.move_copy)
+            # print("actual position: ",[actual_x,actual_y])
             for endGoal in self.goal:
                 if endGoal in self.moved[i]:
                     print("respuesta final: ", self.moved[i])
@@ -129,7 +129,7 @@ class A_FCOST:
                         self.surrounding.append([actual_x-1,actual_y-1])
                         self.searched.append([actual_x-1,actual_y-1])
                         
-            print("alderedores: ", self.surrounding)
+            # print("alderedores: ", self.surrounding)
             # print("buscados: ", self.searched)
             
             self.fCostAnalize()
@@ -148,7 +148,7 @@ class A_FCOST:
                 for find in range(len(self.surrounding)):
                     if self.Fcost[largo_actual+find] == self.Fmin:
                         if self.searched[largo_actual + find] not in self.move_copy:
-                            print(self.searched[largo_actual + find])
+                            # print(self.searched[largo_actual + find])
                         # if self.searched[find] not in self.visited:
                             copy2 = self.move_copy.copy()
                             copy2.append(self.searched[largo_actual + find])
@@ -169,17 +169,32 @@ class A_FCOST:
                 #esto es solo por el momento
                 pass
             # print("moved: ", self.moved)    
-            print("minimo es: ",self.Fmin)
+            # print("minimo es: ",self.Fmin)
             # for less in range(len(self.Fcost)):
             #     if self.Fcost[less] == self.Fmin:
             #         if self.searched[less] not in self.visited:
             #             print("los puntos minimos: ",self.searched[less])
-            print("searched: ", self.searched)
-            print("Fcost: ", self.Fcost)
-            print("temporal array: ", self.temporal_moved)
-            input()
+            # print("searched: ", self.searched)
+            # print("Fcost: ", self.Fcost)
+            # print("temporal array: ", self.temporal_moved)
+            # input()
             
             self.surrounding=[]
+            
+        #eliminar el menor que tenga la lista para de esta forma seguir filtrando
+        for find in range(len(self.Fcost)):
+            if self.Fcost[find] == self.Fmin:
+                self.Fcost[find]= 0
+                self.searched[find] = 0
+                
+        remove_counter = 0
+        for find in range(len(self.Fcost)):
+            if self.Fcost[find] == 0:
+                remove_counter += 1
+                
+        for ciclo in range(remove_counter):
+            self.Fcost.remove(0) 
+            self.searched.remove(0) 
         
         self.moved = self.temporal_moved
         self.temporal_moved = []
