@@ -1,4 +1,5 @@
 from math import *
+#lo que se debe de arreglar aqui es que realize un search total 
 
 class A_FCOST:
     
@@ -49,7 +50,8 @@ class A_FCOST:
             #actual position
             actual_x=self.moved[i][len(self.moved[i])-1][0]
             actual_y=self.moved[i][len(self.moved[i])-1][1]
-            self.visited.append([actual_x,actual_y])
+            if [actual_x,actual_y] not in self.visited:
+                self.visited.append([actual_x,actual_y])
             self.move_copy = self.moved[i].copy()
             print("visited points: ",self.visited)
             print("coy of move: ", self.move_copy)
@@ -138,13 +140,13 @@ class A_FCOST:
                 pass
             # print("moved: ", self.moved)    
             print("minimo es: ",self.Fmin)
-            for less in range(len(self.Fcost)):
-                if self.Fcost[less] == self.Fmin:
-                    if self.searched[less] not in self.visited:
-                        print("los puntos minimos: ",self.searched[less])
+            # for less in range(len(self.Fcost)):
+            #     if self.Fcost[less] == self.Fmin:
+            #         if self.searched[less] not in self.visited:
+            #             print("los puntos minimos: ",self.searched[less])
             print("Fcost: ", self.Fcost)
-            # input()
-            
+            print("temporal array: ", self.temporal_moved)
+            input()
             
             self.surrounding=[]
         
