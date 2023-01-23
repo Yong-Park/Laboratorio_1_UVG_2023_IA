@@ -74,6 +74,6 @@ for y in bmp_array:
 # print(dfs_visited)
 
 afcost = Fcost_A(bmp_array)
-afcost.algorithm()
+afcost.StartUp()
 Fcost_A_camino = afcost.camino
-print("camino final: ", Fcost_A_camino)
+print("camino final resultado: ", Fcost_A_camino)
