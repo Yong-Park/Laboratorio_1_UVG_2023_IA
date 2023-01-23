@@ -83,11 +83,12 @@ class BFS(problem):
     def goalTest(self, state):
         return state in self.finish
     
-    def stepCost(self, state, action, newState):
+    # No se utiliza debido a que el costo es uniforme
+    def stepCost(self):
         pass
     
     def pathCost(self, states):
-        pass
+        return (len(states) - 1) # No se toma en cuenta el inicio 
     
     # Se verifica si todavía hay elementos en la frontera
     def frontier_is_Empty(self):

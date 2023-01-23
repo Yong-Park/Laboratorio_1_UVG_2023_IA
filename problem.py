@@ -15,7 +15,7 @@ class problem(ABC):
         pass
     
     @abstractmethod
-    def stepCost(self, state, action, newState):
+    def stepCost(self):
         pass
     
     @abstractmethod
