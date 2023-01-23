@@ -26,8 +26,8 @@ class DFS:
                 elif self.maze[y][x] == 8:
                     self.start.append([x,y])
                     
-        # print("goal: ", self.goal)
-        # print("start: ", self.start)
+        print("goal: ", self.goal)
+        print("start: ", self.start)
         #agregar la posicion inicail como lugar que ya se movio
         self.moved.append(self.start[0])
         #comenzar a analizar su entorno
@@ -93,6 +93,8 @@ class DFS:
             #     print(text)
             
             #revisar si llego a la meta
+            print("=========")
+            print(self.moved[i])
             for final_goal in self.goal:
                 if final_goal in self.moved[i]:
                     print("width: ", self.width)

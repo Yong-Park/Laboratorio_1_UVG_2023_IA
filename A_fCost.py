@@ -1,241 +1,149 @@
+from framework import Framework
 from math import *
-#lo que se debe de arreglar aqui es que realize un search total 
 
-class A_FCOST:
-    
-    def __init__(self,maze):
+class Fcost_A(Framework):
+
+    def __init__(self, maze):
+        
         self.maze = maze
-        self.surrounding = []
-        self.moved = []
-        self.temporal_moved=[]
-        self.visited=[]
-        self.goal=[]
-        self.start = []
-        self.move_copy = []
-        self.height = len(self.maze)
-        self.width = len(self.maze[0])
-        self.maze_path = []
-        self.Fcost = []
-        self.goalDist=[]
-        self.searched=[]
-        self.Fmin = 0
-        self.searched_check = []
-        self.Fcost_check = []
-       
-    def Start(self):
-        self.StartEndPoint()
-        
-    
-    #obtener sus posiciones de start y end
-    def StartEndPoint(self):
-        for y in range(len(self.maze)):
-            for x in range(len(self.maze[y])):
-                if self.maze[y][x] == 9:
-                    self.goal.append([x,y])
-                elif self.maze[y][x] == 8:
-                    self.start.append([[x,y]])
-                    
-        print("goal: ", self.goal)
-        print("start: ", self.start)
-        #agregar la posicion inicail como lugar que ya se movio
-        self.moved.append(self.start[0])
-        #comenzar a analizar su entorno
-        self.movement()
-        self.fCostAnalize()
-        
-    def movement(self):
-        # print("========================================================================")
-        # for mov in self.moved:
-        #     print("moved: ", mov)  
-        for i in range(len(self.moved)):
-            
-            #actual position
-            actual_x=self.moved[i][len(self.moved[i])-1][0]
-            actual_y=self.moved[i][len(self.moved[i])-1][1]
-            if [actual_x,actual_y] not in self.visited:
-                self.visited.append([actual_x,actual_y])
-            self.move_copy = self.moved[i].copy()
-            # print("visited points: ",self.visited)
-            # print("copy of move: ", self.move_copy)
-            # print("actual position: ",[actual_x,actual_y])
-            for endGoal in self.goal:
-                if endGoal in self.moved[i]:
-                    print("respuesta final: ", self.moved[i])
-                    print("largo: ", len(self.moved[i]))
-                    return self.moved[i]
-                    
-            
-            #revisar si arriba no es un cuadro negro
-            if actual_y-1 >= 0:
-                if self.maze[actual_y-1][actual_x] != 0:
-                    # if([actual_x,actual_y-1]) not in self.visited and ([actual_x,actual_y-1]) not in self.searched:
-                    if [actual_x,actual_y-1] not in self.move_copy:
-                        self.surrounding.append([actual_x,actual_y-1])
-                        self.searched.append([actual_x,actual_y-1])
-                        
-            #revisar si arriba derecha no es un cuadro negro
-            if actual_y-1 >= 0 and actual_x+1 < self.width:
-                if self.maze[actual_y-1][actual_x+1] != 0:
-                    # if([actual_x+1,actual_y-1]) not in self.visited and ([actual_x+1,actual_y-1]) not in self.searched:
-                    if [actual_x+1,actual_y-1] not in self.move_copy:
-                        self.surrounding.append([actual_x+1,actual_y-1])
-                        self.searched.append([actual_x+1,actual_y-1])
-            
-            #revisar si derecha no es un cuadro negro
-            if actual_x+1 < self.width:
-                if self.maze[actual_y][actual_x+1] != 0:
-                    # if([actual_x+1,actual_y]) not in self.visited and ([actual_x+1,actual_y]) not in self.searched:
-                    if [actual_x+1,actual_y] not in self.move_copy:
-                        self.surrounding.append([actual_x+1,actual_y])
-                        self.searched.append([actual_x+1,actual_y])
-                        
-            #revisar si derecha inferior no es un cuadro negro
-            if actual_x+1 < self.width and actual_y + 1 < self.height:
-                if self.maze[actual_y+1][actual_x+1] != 0:
-                    # if([actual_x+1,actual_y+1]) not in self.visited and ([actual_x+1,actual_y+1]) not in self.searched:
-                    if [actual_x+1,actual_y+1] not in self.move_copy:
-                        self.surrounding.append([actual_x+1,actual_y+1])
-                        self.searched.append([actual_x+1,actual_y+1])
-                        
-            #revisar si abajo no es un cuadro negro
-            if actual_y+1 < self.height:
-                if self.maze[actual_y+1][actual_x] != 0:
-                    # if([actual_x,actual_y+1]) not in self.visited and ([actual_x,actual_y+1]) not in self.searched:
-                    if [actual_x,actual_y+1] not in self.move_copy:
-                        self.surrounding.append([actual_x,actual_y+1])
-                        self.searched.append([actual_x,actual_y+1])
-                        
-            #revisar si abajo izquierda no es un cuadro negro
-            if actual_y+1 < self.height and actual_x-1 >= 0:
-                if self.maze[actual_y+1][actual_x-1] != 0:
-                    # if([actual_x-1,actual_y+1]) not in self.visited and ([actual_x-1,actual_y+1]) not in self.searched:
-                    if [actual_x-1,actual_y+1] not in self.move_copy:
-                        self.surrounding.append([actual_x-1,actual_y+1])
-                        self.searched.append([actual_x-1,actual_y+1])
-    
-            #revisar si izquierda no es un cuadro negro
-            if actual_x-1 >=0:
-                if self.maze[actual_y][actual_x-1] != 0:
-                    # if([actual_x-1,actual_y]) not in self.visited and ([actual_x-1,actual_y]) not in self.searched:
-                    if [actual_x-1,actual_y] not in self.move_copy:
-                        self.surrounding.append([actual_x-1,actual_y])
-                        self.searched.append([actual_x-1,actual_y])
-            
-            #revisar si izquierda superior no es un cuadro negro
-            if actual_x-1 >=0 and actual_y-1>=0:
-                if self.maze[actual_y-1][actual_x-1] != 0:
-                    # if([actual_x-1,actual_y-1]) not in self.visited and ([actual_x-1,actual_y-1]) not in self.searched:
-                    if [actual_x-1,actual_y-1] not in self.move_copy:
-                        self.surrounding.append([actual_x-1,actual_y-1])
-                        self.searched.append([actual_x-1,actual_y-1])
-                        
-            # print("alderedores: ", self.surrounding)
-            # print("buscados: ", self.searched)
-            
-            self.fCostAnalize()
-            if len(self.searched) != len(self.surrounding):
-                largo_actual = (len(self.searched)-1) - (len(self.surrounding) -1)
-                # print(self.searched)
-                # print(self.surrounding)
-                # print(largo_actual)
-            else:
-                largo_actual = 0
-            if type(self.Fcost[0] != list):
-                
-                self.Fmin = min(self.Fcost)
-                # for find_min in 
-                
-                for find in range(len(self.surrounding)):
-                    if self.Fcost[largo_actual+find] == self.Fmin:
-                        if self.searched[largo_actual + find] not in self.move_copy:
-                            # print(self.searched[largo_actual + find])
-                        # if self.searched[find] not in self.visited:
-                            copy2 = self.move_copy.copy()
-                            copy2.append(self.searched[largo_actual + find])
-                            self.temporal_moved.insert(0,copy2)
-                            # self.visited.append(self.searched[find])
-                        
-                # for find in range(len(self.Fcost)):
-                #     if self.Fcost[find] == self.Fmin:
-                #         if self.searched[find] not in self.move_copy:
-                #             print(self.searched[find])
-                #         # if self.searched[find] not in self.visited:
-                #             copy2 = self.move_copy.copy()
-                #             copy2.append(self.searched[find])
-                #             self.temporal_moved.insert(0,copy2)
-                #             # self.visited.append(self.searched[find])
+        self.height = len(maze)
+        self.width = len(maze[0])
 
-            else:
-                #esto es solo por el momento
-                pass
-            # print("moved: ", self.moved)    
-            # print("minimo es: ",self.Fmin)
-            # for less in range(len(self.Fcost)):
-            #     if self.Fcost[less] == self.Fmin:
-            #         if self.searched[less] not in self.visited:
-            #             print("los puntos minimos: ",self.searched[less])
-            # print("searched: ", self.searched)
-            # print("Fcost: ", self.Fcost)
-            # print("temporal array: ", self.temporal_moved)
+        self.final = []
+        self.inicio = None
+
+        self.line_up = []
+        self.visitados = []
+        self.camino = []
+
+    def actions(self):
+        pass
+
+    def results(self):
+        pass
+
+    def goalTest(self):
+        pass
+
+    def stepTest(self):
+        pass
+
+    def pathTest(self):
+        pass
+
+    def algorithm(self):
+        self.inicio = None
+        self.final = []
+        self.line_up = []
+        self.visitados = []
+        self.came_from = None
+
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.maze[y][x] == 8:
+                    self.inicio = (x,y)
+                elif self.maze[y][x] == 9:
+                    self.final.append((x,y))
+
+        print('Este es el inicio:',self.inicio)
+        print('Posibles finales',self.final)
+
+        #Algoritmo F cost A star
+        self.line_up.append(self.inicio)
+        self.visitados.append(self.inicio)
+        self.came_from = {self.inicio: None}
+
+        # Se itera mientras la cola no esté vacía
+        while  self.line_up:
+            # Se saca el primer nodo de la cola
+            self.current =  self.line_up.pop(0)
+            print("actual: ",self.current)
+            # Se comprueba si el nodo actual es el nodo final
+            if self.current in self.final:
+                # Se construye el camino y se regresa
+                self.camino = []
+                while self.current != self.inicio:
+                    self.camino.append(self.current)
+                    self.current = self.came_from[self.current]
+                self.camino.append(self.inicio)
+                # print("camino final: ", self.camino[::-1])
+                return self.camino[::-1]
+            
+            
+            # Se obtienen los vecinos del nodo actual
+            neighbours = self.obtener_vecinos(self.current)
+            print("sus nodos vecinos: ", neighbours)
+            costos = self.calcular_Fcost(neighbours)
+            #realizar una revision solo para ver si ya se visito y si es en este caso cambiar su costo a muy elevado
+            for costIndex in range(len(costos)):
+                if neighbours[costIndex] in self.visitados:
+                    # actualizar el costo para que sea muy elevado
+                    costos[costIndex] = 999999
+                    
+            print("valores de F: ", costos)
+            costoMinimo = min(costos)
+            print("costo minimo: ",costoMinimo)
             # input()
-            
-            self.surrounding=[]
-            
-        #eliminar el menor que tenga la lista para de esta forma seguir filtrando
-        for find in range(len(self.Fcost)):
-            if self.Fcost[find] == self.Fmin:
-                self.Fcost[find]= 0
-                self.searched[find] = 0
+            #solo visitara los que tengan el menor costo
+            for costIndex in range(len(costos)):
+                if neighbours[costIndex] not in self.visitados and costos[costIndex] == costoMinimo:
+                        # Se agrega el vecino a la cola y se marca como visitado
+                        print("el que se visito: ", neighbours[costIndex])
+                        self.line_up.append(neighbours[costIndex])
+                        self.visitados.append(neighbours[costIndex])
+                        # Se actualiza el predecesor del vecino
+                        self.came_from[neighbours[costIndex]] = self.current
                 
-        remove_counter = 0
-        for find in range(len(self.Fcost)):
-            if self.Fcost[find] == 0:
-                remove_counter += 1
-                
-        for ciclo in range(remove_counter):
-            self.Fcost.remove(0) 
-            self.searched.remove(0) 
-        
-        self.moved = self.temporal_moved
-        self.temporal_moved = []
-        self.movement()
-            
-    def fCostAnalize(self):
-        #se va a calcular el valor G y H para obtener el valor F de cada nodo
-        # print()
-        for x in self.surrounding:
-            # print("node: ", x)
-            #calcular G
-            G = dist(x,self.start[0][0])
-            #calcular H
-            if len(self.goal) > 1:
-                temporal_list = []
-                for end in self.goal:
-                    H = dist(x,end)
-                    temporal_list.append(H)
-                self.goalDist.append(temporal_list)
-            else:
-                H = dist(x,self.goal[0])
-                self.goalDist.append(H)
-            #calcular F
-            # print("G value: ", G)
-            # print("H value: ", self.goalDist)
-            if (type(self.goalDist[0]) == list):
-                F1 = G + self.goalDist[0][0]
-                F2 = G + self.goalDist[0][1]
-                temporal_list = []
-                temporal_list.append(round(F1))
-                temporal_list.append(round(F2))
-                self.Fcost.append(temporal_list)
-            else:
-                F = G + self.goalDist[0]
-                self.Fcost.append(round(F))
-            self.goalDist.pop(0)
-            # print("Fcost: ", self.Fcost)
-            
-            # print("================================")
-            
-            
-        
+            print("=========================")
 
+    def obtener_vecinos(self, posicion):
+        posibles = []
+        x,y = posicion
+        #derecha
+        if x+1 < self.width:
+            if self.maze[y][x+1]!=0: 
+                posibles.append((x+1,y))
+        #izquierda
+        if x-1 >=0:
+            if self.maze[y][x-1]!=0:
+                posibles.append((x-1,y))
+        #abajo
+        if y+1 < self.height:
+            if self.maze[y+1][x]!=0:
+                posibles.append((x,y+1))
+        #arriba
+        if y-1 >=0:
+            if self.maze[y-1][x]!=0:
+                posibles.append((x,y-1))
+        #izquierda superior
+        if x-1 >=0 and y-1>=0:
+            if self.maze[y-1][x-1]!=0:
+                posibles.append((x-1,y-1))
+        #izquierda inferior
+        if x-1 >=0 and y+1 < self.height:
+            if self.maze[y+1][x-1]!=0:
+                posibles.append((x-1,y+1))
+        #derecha superior
+        if x+1 < self.width and y-1>=0:
+            if self.maze[y-1][x+1]!=0:
+                posibles.append((x+1,y-1))
+        #derecha inferior
+        if  x+1 < self.width and y+1 < self.height:
+            if self.maze[y+1][x+1]!=0:
+                posibles.append((x+1,y+1))
+        return posibles
+    
+    def calcular_Fcost(self,vecinos):
+        Fcost_values = []
+        nodos = vecinos
+        
+        for nodo in (nodos):
+            G = dist(self.inicio,nodo)
+            H = []
+            for nodo_final in self.final:
+                h =  dist(nodo_final,nodo)
+                H.append(h)
+            F = round(G + min(H))
+            Fcost_values.append(F)
+        return Fcost_values
         

@@ -63,6 +63,9 @@ pixel_image = "pixel1.bmp"
 pixelate(image,pixel_size,pixel_image)
 bmp_array = bmp_to_array(pixel_image, pixel_size)
 
+for y in bmp_array:
+    print(y)
+
 # dfs = DFS(bmp_array)
 # dfs_laberinto,dfs_visited = dfs.Start()
 # print("el resultado final es")
@@ -70,6 +73,7 @@ bmp_array = bmp_to_array(pixel_image, pixel_size)
 # print("visitados")
 # print(dfs_visited)
 
-afcost = A_FCOST(bmp_array)
-afcost.Start()
-
+afcost = Fcost_A(bmp_array)
+afcost.algorithm()
+Fcost_A_camino = afcost.camino
+print("camino final: ", Fcost_A_camino)
