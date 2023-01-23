@@ -177,7 +177,8 @@ class BFS(problem):
                 self.path = [self.start]
                 while self.actualState != self.start:
                     self.results("back",self.actualState)
-                return self.path[::-1]
+                self.path.reverse()
+                return self.path
             
             # Se obtienen los vecinos en caso de que no sea la meta
             self.get_neighbors(self.actualState, "shortPath")
