@@ -15,7 +15,6 @@ dfs = DFS(bmp_array)
 dfs.actions()
 visitado, camino = dfs.results()
 # print(visitado)
-print(camino)
 road = camino
 
 # a_star = Fcost_A(bmp_array)
@@ -25,7 +24,7 @@ road = camino
 # bfs = BFS(bmp_array)
 # road = bfs.search_shortest_path()
 
-for point in road:
+for point in road[1:-1]:
     i, j = point
     bmp_array[j][i] = 5
 
