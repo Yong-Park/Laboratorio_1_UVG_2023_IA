@@ -2,20 +2,23 @@ from abc import ABC, abstractmethod
 
 class Framework(ABC):
     @abstractmethod
-    def __init__(self, maze, w, h):
-        pass
-    @abstractmethod
-    def actions(self):
+    def __init__(self, maze):
         pass
     @abstractmethod
     def results(self):
         pass
     @abstractmethod
-    def goalTest(self):
+    def goal(self):
         pass
     @abstractmethod
-    def stepTest(self):
+    def step(self):
         pass
     @abstractmethod
-    def pathTest(self):
+    def stepCost(self,paths):
+        pass
+    @abstractmethod
+    def surrounding(self,position):
+        pass
+    @abstractmethod
+    def actions(self):
         pass
