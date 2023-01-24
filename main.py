@@ -2,6 +2,8 @@ from PIL import Image
 from numpy import *
 import math
 import bmp
+from dfs import *
+from A_fCost import *
 
 def pixelate(input_file_path, pixel_size, file_name):
     image = Image.open(input_file_path)
@@ -62,6 +64,21 @@ pixel_size = 20
 pixelate(image, pixel_size, pixelated_image)
 width, height, bmp_array = bmp_to_array(pixelated_image, pixel_size)
 
+for y in bmp_array:
+    print(y)
+
+print(width, height)
+
+dfs = DFS(bmp_array)
+dfs.actions()
+visitado, camino = dfs.results()
+print("camino final resultado: ", camino)
+
+# afcost = Fcost_A(bmp_array)
+# afcost.actions()
+# visitado,camino = afcost.results()
+# print("camino final resultado: ", camino)
+
 def array_to_bmp(width, height, bmp_array, file_name):
     framebuffer = [[0 for _ in range(width)] for _ in range(height)]
     bmp_array_len = len(bmp_array)
@@ -84,3 +101,4 @@ def array_to_bmp(width, height, bmp_array, file_name):
                 framebuffer[i][j] = bytes([0, 0, 255])
 
     bmp.write_bmp(file_name, framebuffer[::-1], width, height)
+    
