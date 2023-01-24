@@ -62,8 +62,6 @@ pixel_size = 20
 pixelate(image, pixel_size, pixelated_image)
 width, height, bmp_array = bmp_to_array(pixelated_image, pixel_size)
 
-print(width, height)
-
 def array_to_bmp(width, height, bmp_array, file_name):
     framebuffer = [[0 for _ in range(width)] for _ in range(height)]
     bmp_array_len = len(bmp_array)
