@@ -77,6 +77,8 @@ class DFS(Framework):
                     self.meta.append([x,y])
                 elif self.maze[y][x] == 8:
                     self.start.append([x,y])
+        print("start: ", self.start)
+        print("meta: ",self.meta)
         #agregar la posicion inicail como lugar que ya se movio
         self.moved.append(self.start[0])
         #comenzar a analizar su entorno
