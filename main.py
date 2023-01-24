@@ -56,9 +56,9 @@ def bmp_to_array(input_file_path, pixel_size):
     
     return bmp_array[::-1]
 
-image = "map1.bmp"
-pixel_size = 35
-pixel_image = "pixel1.bmp"
+image = "map3.bmp"
+pixel_size = 20
+pixel_image = "pixe3.bmp"
 
 pixelate(image,pixel_size,pixel_image)
 bmp_array = bmp_to_array(pixel_image, pixel_size)
@@ -66,14 +66,14 @@ bmp_array = bmp_to_array(pixel_image, pixel_size)
 for y in bmp_array:
     print(y)
 
-# dfs = DFS(bmp_array)
-# dfs_laberinto,dfs_visited = dfs.Start()
-# print("el resultado final es")
-# print(dfs_laberinto)
-# print("visitados")
-# print(dfs_visited)
+dfs = DFS(bmp_array)
+dfs_laberinto,dfs_visited = dfs.Start()
+print("el resultado final es")
+print(dfs_laberinto)
+print("visitados")
+print(dfs_visited)
 
-afcost = Fcost_A(bmp_array)
-afcost.StartUp()
-Fcost_A_camino = afcost.camino
-print("camino final resultado: ", Fcost_A_camino)
+# afcost = Fcost_A(bmp_array)
+# afcost.StartUp()
+# Fcost_A_camino = afcost.camino
+# print("camino final resultado: ", Fcost_A_camino)

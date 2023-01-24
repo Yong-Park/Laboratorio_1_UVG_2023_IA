@@ -1,19 +1,16 @@
 from framework import Framework
-from math import *
 
-class Fcost_A(Framework):
-
-    def __init__(self, maze):
+class DFS(Framework):
+    def __init__(self,maze):
         # asignacion de valores
         self.maze = maze
-        self.height = len(maze)
-        self.width = len(maze[0])
-        # print(self.height, self.width)
+        self.height = len(self.maze)
+        self.width = len(self.maze[0])
 
         self.final = []
         self.inicio = None
         self.came_from = None
-
+        
         self.paths = []
         self.visitados = []
         self.camino = []
@@ -32,8 +29,8 @@ class Fcost_A(Framework):
 
     def pathTest(self):
         pass
-
-    
+        
+    #para inicar el proceso
     def StartUp(self):
         # econtrar su posicion inicial y las finales
         for y in range(self.height):
@@ -43,15 +40,15 @@ class Fcost_A(Framework):
                 elif self.maze[y][x] == 9:
                     self.final.append((x,y))
 
-        # print('Este es el inicio:',self.inicio)
-        # print('Posibles finales',self.final)
+        print('Este es el inicio:',self.inicio)
+        print('Posibles finales',self.final)
 
-        # Algoritmo F cost A star
+        # Algoritmo DFS
         self.paths.append(self.inicio)
         self.visitados.append(self.inicio)
         self.came_from = {self.inicio: None}
 
-        while  self.paths:
+        while self.paths:
             # obtener el primer nodo para analizar sus vecinos
             self.current =  self.paths.pop(0)
             # print("actual: ",self.current)
@@ -68,34 +65,23 @@ class Fcost_A(Framework):
             # Se obtienen los vecinos del nodo actual
             vecinos = self.obtener_vecinos(self.current)
             # print("sus nodos vecinos: ", vecinos)
-            costos = self.calcular_Fcost(vecinos)
-            # Realizar una revision solo para ver si ya se visito y si es en este caso cambiar su costo a muy elevado
-            for costIndex in range(len(costos)):
-                if vecinos[costIndex] in self.visitados:
-                    # actualizar el costo para que sea muy elevado
-                    costos[costIndex] = 999999
                     
-            # print("valores de F: ", costos)
-            costoMinimo = min(costos)
-            # print("costo minimo: ",costoMinimo)
             # input()
-            # solo visitara los que tengan el menor costo
-            for costIndex in range(len(costos)):
-                if vecinos[costIndex] not in self.visitados and costos[costIndex] == costoMinimo:
+            # solo visitar siempre primero si es posible desde la izquierda luego abajo, derecha y finalmente arriba
+            for costIndex in range(len(vecinos)):
+                if vecinos[costIndex] not in self.visitados:
                         # print("el que se visito: ", vecinos[costIndex])
                         self.paths.append(vecinos[costIndex])
                         self.visitados.append(vecinos[costIndex])
                         self.came_from[vecinos[costIndex]] = self.current
+                        break
                 
             # print("=========================")
 
+    #para realizar la parte del movimiento
     def obtener_vecinos(self, posicion):
         posibles = []
         x,y = posicion
-        #derecha
-        if x+1 < self.width:
-            if self.maze[y][x+1]!=0: 
-                posibles.append((x+1,y))
         #izquierda
         if x-1 >=0:
             if self.maze[y][x-1]!=0:
@@ -104,40 +90,12 @@ class Fcost_A(Framework):
         if y+1 < self.height:
             if self.maze[y+1][x]!=0:
                 posibles.append((x,y+1))
+        #derecha
+        if x+1 < self.width:
+            if self.maze[y][x+1]!=0: 
+                posibles.append((x+1,y))
         #arriba
         if y-1 >=0:
             if self.maze[y-1][x]!=0:
                 posibles.append((x,y-1))
-        #izquierda superior
-        if x-1 >=0 and y-1>=0:
-            if self.maze[y-1][x-1]!=0:
-                posibles.append((x-1,y-1))
-        #izquierda inferior
-        if x-1 >=0 and y+1 < self.height:
-            if self.maze[y+1][x-1]!=0:
-                posibles.append((x-1,y+1))
-        #derecha superior
-        if x+1 < self.width and y-1>=0:
-            if self.maze[y-1][x+1]!=0:
-                posibles.append((x+1,y-1))
-        #derecha inferior
-        if  x+1 < self.width and y+1 < self.height:
-            if self.maze[y+1][x+1]!=0:
-                posibles.append((x+1,y+1))
         return posibles
-    
-    #para calcular el cost de F de todos vecinos
-    def calcular_Fcost(self,vecinos):
-        Fcost_values = []
-        nodos = vecinos
-        
-        for nodo in (nodos):
-            G = dist(self.inicio,nodo)
-            H = []
-            for nodo_final in self.final:
-                h =  dist(nodo_final,nodo)
-                H.append(h)
-            F = round(G + min(H))
-            Fcost_values.append(F)
-        return Fcost_values
-        

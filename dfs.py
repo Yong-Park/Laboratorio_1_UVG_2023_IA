@@ -93,14 +93,14 @@ class DFS:
             #     print(text)
             
             #revisar si llego a la meta
-            print("=========")
-            print(self.moved[i])
+            # print("=========")
+            # print(self.moved[i])
             for final_goal in self.goal:
                 if final_goal in self.moved[i]:
-                    print("width: ", self.width)
-                    print("height: ", self.height)
+                    # print("width: ", self.width)
+                    # print("height: ", self.height)
                     # print("movement: ", self.moved[i])
-                    print("numer of movement: ", len(self.moved[i]))
+                    # print("numer of movement: ", len(self.moved[i]))
                     self.maze_path = self.moved[i]
                     self.moved = []
 
