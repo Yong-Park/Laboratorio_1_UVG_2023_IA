@@ -83,7 +83,7 @@ class BFS(problem):
     def goalTest(self, state):
         return state in self.finish
     
-    # No se utiliza debido a que el costo es uniforme
+    # No se utiliza debido a que el costo es uniforme 
     def stepCost(self):
         pass
     
