@@ -3,6 +3,7 @@ from bfs import *
 from dfs import *
 from dfs_backup import *
 from A_fCost import *
+from degree_a_star import *
 
 image = "./images/map2.bmp"
 pixelated_image = "./images/pixel2.bmp"
@@ -11,26 +12,41 @@ pixel_size = 20
 utils.pixelate(image, pixel_size, pixelated_image)
 width, height, bmp_array = utils.bmp_to_array(pixelated_image, pixel_size)
 
-dfs = DFS(bmp_array)
-dfs.actions()
-visitado, camino = dfs.results()
-# print(visitado)
-road = camino
+print("""
+    1. BFS.
+    2. DFS.
+    3. A* (euclidean).
+    4. A* (inverse tangent).
+""")
 
-# a_star = Fcost_A(bmp_array)
-# a_star.actions()
-# visited, road = a_star.results()
+algorithm = input("Input the algorithm you want to use: ")
 
-# bfs = BFS(bmp_array)
-# road = bfs.search_shortest_path()
+if (algorithm == "1"):
+    bfs = BFS(bmp_array)
+    road = bfs.search_shortest_path()
+elif (algorithm == "2"):
+    dfs = DFS(bmp_array)
+    dfs.actions()
+    visited, road = dfs.results()
+elif (algorithm == "3"):
+    a_star = Fcost_A(bmp_array)
+    a_star.actions()
+    visited, road = a_star.results()
+elif (algorithm == "4"):
+    a_star = DegreeAstar(bmp_array)
+    a_star.actions()
+    visited, road = a_star.results()
+else:
+    print("You didn't input a valid algorithm.")
+    exit()
 
-for point in road[1:-1]:
+for point in road[0:-2]:
     i, j = point
-    bmp_array[j][i] = 5
+    if (algorithm == "1"):
+        bmp_array[i][j] = 5
+    else:
+        bmp_array[j][i] = 5
 
 utils.array_to_bmp(width, height, bmp_array, "./images/result.bmp")
 
-# afcost = Fcost_A(bmp_array)
-# afcost.actions()
-# visitado,camino = afcost.results()
-# print("camino final resultado: ", camino)
+print("\nResult's out. Check ./images/result.bmp.\n")

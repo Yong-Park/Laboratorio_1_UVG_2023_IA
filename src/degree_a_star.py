@@ -1,139 +1,92 @@
 from framework import Framework
-from math import *
+import math
 
-class Fcost_A(Framework):
+class DegreeAstar(Framework):
 
     def __init__(self, maze):
-        # asignacion de valores
         self.maze = maze
-        self.height = len(maze)
-        self.width = len(maze[0])
-        # print(self.height, self.width)
-
-        self.final = []
-        self.inicio = None
+        self.width, self.height = len(maze), len(maze)
+        self.ending = []
+        self.start = None
         self.came_from = None
-
         self.paths = []
-        self.visitados = []
-        self.camino = []
+        self.visited = []
+        self.road = []
 
-    #regresa el camino final 
     def results(self):
-        return self.visitados, self.camino
+        return self.visited, self.road
 
-    #solo se movera si no esta visitado y es igual al minimo
     def step(self):
-        for costIndex in range(len(self.costos)):
-            if self.vecinos[costIndex] not in self.visitados and self.costos[costIndex] == self.costoMinimo:
-                    self.paths.append(self.vecinos[costIndex])
-                    self.visitados.append(self.vecinos[costIndex])
-                    self.came_from[self.vecinos[costIndex]] = self.current
-    
-    #obtiene los vecinos que se encuentre
+        for cost in range(len(self.costs)):
+            if ((self.neighbors[cost] not in self.visited) and (self.costs[cost] == self.minimal_cost)):
+                self.paths.append(self.neighbors[cost])
+                self.visited.append(self.neighbors[cost])
+                self.came_from[self.neighbors[cost]] = self.current
+
     def surrounding(self, position):
-        posibles = []
-        x,y = position
-        #derecha
-        if x+1 < self.width:
-            if self.maze[y][x+1]!=0: 
-                posibles.append((x+1,y))
-        #izquierda
-        if x-1 >=0:
-            if self.maze[y][x-1]!=0:
-                posibles.append((x-1,y))
-        #abajo
-        if y+1 < self.height:
-            if self.maze[y+1][x]!=0:
-                posibles.append((x,y+1))
-        #arriba
-        if y-1 >=0:
-            if self.maze[y-1][x]!=0:
-                posibles.append((x,y-1))
-        #izquierda superior
-        if x-1 >=0 and y-1>=0:
-            if self.maze[y-1][x-1]!=0:
-                posibles.append((x-1,y-1))
-        #izquierda inferior
-        if x-1 >=0 and y+1 < self.height:
-            if self.maze[y+1][x-1]!=0:
-                posibles.append((x-1,y+1))
-        #derecha superior
-        if x+1 < self.width and y-1>=0:
-            if self.maze[y-1][x+1]!=0:
-                posibles.append((x+1,y-1))
-        #derecha inferior
-        if  x+1 < self.width and y+1 < self.height:
-            if self.maze[y+1][x+1]!=0:
-                posibles.append((x+1,y+1))
-        return posibles
-    
-    #para calcular el cost de F de todos vecinos
+
+        possible_positions = []
+        x, y = position
+        left, right, up, down = (x - 1), (x + 1), (y - 1), (y + 1)
+
+        if ((left >= 0) and (self.maze[y][left] != 0)):
+            possible_positions.append((left, y))
+        if ((right < self.width) and (self.maze[y][right])):
+            possible_positions.append((right, y))
+        if ((up >= 0) and (self.maze[up][x] != 0)):
+            possible_positions.append((x, up))
+        if ((down < self.height) and (self.maze[down][x] != 0)):
+            possible_positions.append((x, down))
+
+        return possible_positions
+
     def stepCost(self, paths):
-        Fcost_values = []
-        nodos = paths
-        
-        for nodo in (nodos):
-            G = dist(self.inicio,nodo)
+
+        cost_values = []
+        nodes = paths
+
+        for node in nodes:
+            G = math.dist(self.start, node)
             H = []
-            for nodo_final in self.final:
-                h =  dist(nodo_final,nodo)
+            points = []
+            for point in self.ending:
+                x, y = abs((point[0] - node[0])), abs((point[1] - node[0]))
+                points.append((x, y))
+                h = math.atan2(point[1], point[0])
                 H.append(h)
             F = round(G + min(H))
-            Fcost_values.append(F)
-        return Fcost_values
-    
-    #revisa si el nodo en el que esta es la meta
-    def goal(self):
-        if self.current in self.final:
-            self.camino = []
-            while self.current != self.inicio:
-                self.camino.append(self.current)
-                self.current = self.came_from[self.current]
-            self.camino.append(self.inicio)
-            # Reasignar las posiciones de los nodos
-            self.camino = self.camino[::-1]
+            cost_values.append(F)
+        return cost_values
 
-    
+    def goal(self):
+        if self.current in self.ending:
+            self.road = []
+            while self.current != self.start:
+                self.road.append(self.current)
+                self.current = self.came_from[self.current]
+            self.road = self.road[::-1]
+
     def actions(self):
-        # econtrar su posicion inicial y las finales
         for y in range(self.height):
             for x in range(self.width):
-                if self.maze[y][x] == 8:
-                    self.inicio = (x,y)
-                elif self.maze[y][x] == 9:
-                    self.final.append((x,y))
+                if (self.maze[y][x] == 8):
+                    self.start = (x, y)
+                elif (self.maze[y][x] == 9):
+                    self.ending.append((x, y))
 
-        # print('Este es el inicio:',self.inicio)
-        # print('Posibles finales',self.final)
+        self.paths.append(self.start)
+        self.visited.append(self.start)
+        self.came_from = { self.start: None }
 
-        # Algoritmo F cost A star
-        self.paths.append(self.inicio)
-        self.visitados.append(self.inicio)
-        self.came_from = {self.inicio: None}
-
-        while  self.paths:
-            # obtener el primer nodo para analizar sus vecinos
+        while (self.paths):
             self.current =  self.paths.pop(0)
-            # print("actual: ",self.current)
-            # Se comprueba si el nodo es la meta
             self.goal()
-            
-            # Se obtienen los vecinos del nodo actual
-            self.vecinos = self.surrounding(self.current)
-            # print("sus nodos vecinos: ", vecinos)
-            self.costos = self.stepCost(self.vecinos)
-            # Realizar una revision solo para ver si ya se visito y si es en este caso cambiar su costo a muy elevado
-            for costIndex in range(len(self.costos)):
-                if self.vecinos[costIndex] in self.visitados:
-                    # actualizar el costo para que sea muy elevado
-                    self.costos[costIndex] = 999999
-                    
-            # print("valores de F: ", costos)
-            self.costoMinimo = min(self.costos)
-            # print("costo minimo: ",costoMinimo)
-            # input()
-            # solo visitara los que tengan el menor costo
+            self.neighbors = self.surrounding(self.current)
+            self.costs = self.stepCost(self.neighbors)
+
+            for costIndex in range(len(self.costs)):
+                if (self.neighbors[costIndex] in self.visited):
+                    self.costs[costIndex] = 999_999
+
+            self.minimal_cost = min(self.costs)
             self.step()
-                
-            # print("=========================")

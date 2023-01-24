@@ -22,10 +22,10 @@ class DFS_backup(Framework):
     def step(self):
         pass
     
-    def stepCost(self, paths):
+    def step_cost(self, paths):
         pass
 
-    def surrounding(self, position):
+    def get_surrounding_positions(self, position):
         pass
     
     #inicio del proceso
