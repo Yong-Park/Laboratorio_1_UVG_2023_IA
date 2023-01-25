@@ -5,9 +5,9 @@ from dfs_backup import *
 from A_fCost import *
 from degree_a_star import *
 
-image = "./images/map2.bmp"
-pixelated_image = "./images/pixel2.bmp"
-pixel_size = 20
+image = "./images/turing.bmp"
+pixelated_image = "./images/pixel_turing.bmp"
+pixel_size = 2
 
 utils.pixelate(image, pixel_size, pixelated_image)
 width, height, bmp_array = utils.bmp_to_array(pixelated_image, pixel_size)
@@ -39,6 +39,8 @@ elif (algorithm == "4"):
 else:
     print("You didn't input a valid algorithm.")
     exit()
+
+print(road)
 
 for point in road[0:-2]:
     i, j = point
