@@ -7,7 +7,7 @@ from degree_a_star import *
 
 image = "./images/turing.bmp"
 pixelated_image = "./images/pixel_turing.bmp"
-pixel_size = 2
+pixel_size = 1
 
 utils.pixelate(image, pixel_size, pixelated_image)
 width, height, bmp_array = utils.bmp_to_array(pixelated_image, pixel_size)
@@ -40,9 +40,12 @@ else:
     print("You didn't input a valid algorithm.")
     exit()
 
+print("_____")
+print(visited)
+print()
 print(road)
 
-for point in road[0:-2]:
+for point in visited[0:-2]:
     i, j = point
     if (algorithm == "1"):
         bmp_array[i][j] = 5

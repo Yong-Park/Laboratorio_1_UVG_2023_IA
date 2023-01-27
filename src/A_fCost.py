@@ -20,6 +20,7 @@ class Fcost_A(Framework):
 
     #regresa el camino final 
     def results(self):
+        # print(self.camino)
         return self.visitados, self.camino
 
     #solo se movera si no esta visitado y es igual al minimo
@@ -86,6 +87,7 @@ class Fcost_A(Framework):
     #revisa si el nodo en el que esta es la meta
     def goal(self):
         if self.current in self.final:
+            # print("llego a un resultado")
             self.camino = []
             while self.current != self.inicio:
                 self.camino.append(self.current)
@@ -121,7 +123,7 @@ class Fcost_A(Framework):
             
             # Se obtienen los vecinos del nodo actual
             self.vecinos = self.surrounding(self.current)
-            # print("sus nodos vecinos: ", vecinos)
+            # print("sus nodos vecinos: ", self.vecinos)
             self.costos = self.stepCost(self.vecinos)
             # Realizar una revision solo para ver si ya se visito y si es en este caso cambiar su costo a muy elevado
             for costIndex in range(len(self.costos)):
@@ -129,9 +131,9 @@ class Fcost_A(Framework):
                     # actualizar el costo para que sea muy elevado
                     self.costos[costIndex] = 999999
                     
-            # print("valores de F: ", costos)
+            # print("valores de F: ", self.costos)
             self.costoMinimo = min(self.costos)
-            # print("costo minimo: ",costoMinimo)
+            # print("costo minimo: ",self.costoMinimo)
             # input()
             # solo visitara los que tengan el menor costo
             self.step()
